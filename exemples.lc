@@ -1,0 +1,27 @@
+(* operateur modulo *)
+let mod = \n m.n-(n/m)*m;
+let rec pow =\n m.if m==1 then n else n*(pow n (m-1));
+
+(* somme des entier de 1 à n *)
+let somme = \n.let rec somme = \n m.if m==n then n else m+(somme n (m+1)) in somme n 1;
+
+(* tester si un nombre est premier *)
+let premier=\n.let rec pr=\m n.if n==0 then false else if n==1 then true 
+						else if(m>(n/2)) then true 
+						else if (n-(n/m)*m)==0 then false 
+						else pr (m+1) n 
+							in pr 2 n ;
+
+(* factorielle *)
+let rec factorielle =\x.if x==0 then 1 else x*(factorielle (x-1));
+
+(* factorielleChurch *)
+let rec factorielleC = \n.IF (iszero n) THEN c1 ELSE mul n (factorielleC (pred n));
+
+(* equation second degrès *)
+let delta=\a b c.b*.b-.4.*.a*.c;
+let sol1=\a b d.(-.b-.(sqrt d))/.(2.*.a);
+let sol2=\a b d.(-.b+.(sqrt d))/.(2.*.a);
+let solEq=\s a b c.let d=(delta a b c) in if( d>0. || d==0. ) then
+(if s then sol1 a b d else sol2 a b d) else pasDeSolution:real;
+

@@ -1,0 +1,59 @@
+(*Résolution d'une équation de deuxième degré : OCaml
+let delta=fun a b c->b*.b-.4.*.a*.c;;
+let sol1=fun a b d->(-.b-.(sqrt d))/.(2.*.a);;
+let sol2=fun a b d->(-.b+.(sqrt d))/.(2.*.a);;
+let solEq=fun s a b c->let d=(delta a b c) in if( d>0. || d==0. ) then
+(if s then sol1 a b d else sol2 a b d) else (print_string "pasDeSolution";0.) ;;
+solEq true 3. 3. 3.*)
+
+
+(*Résolution d'une équation de deuxième degré*)
+let delta=\a b c.b*.b-.4.*.a*.c;
+let sol1=\a b d.(-.b-.(sqrt d))/.(2.*.a);
+let sol2=\a b d.(-.b+.(sqrt d))/.(2.*.a);
+let solEq=\s a b c.let d=(delta a b c) in if( d>0. || d==0. ) then
+(if s then sol1 a b d else sol2 a b d) else pasDeSolution:real;
+
+(*Factoriel*)
+let rec ft=\n.( if (n==0) then 1 else n*(ft(n-1)) );
+(*multiplication*)
+let rec mul =\a b.if(b==0) then 0 else a+(mul a (b-1)); 
+
+let rec un=\n.if n==0 then 1 else if n==1 then 1 else  (un (n-1))+(un (n-2));
+(* let rec un=fun n->if n==0 then 1 else if n==1 then 1 else  (un (n-1))+(un (n-2)) *)
+let  compterA10= let rec compterA10 = (\n.(if (n==10) then 10 else (compterA10 (n+1)))) in compterA10 0;
+let rec toList=\n.if(n==10) then n else (cons (toList (n-1)) nil );
+(*
+let ltrue = \a b.a;
+let lfalse = \a b.b;
+let iszero = \n. n (\x. lfalse) ltrue;
+let pred = \n f x . n (\g h. h (g f)) (\u.x) (\u.u);
+let mul = \m n f .m ( n f);
+let rec factrec = \n.IF (iszero n) THEN c1 ELSE mul n (factrec (pred n));*)
+let prime=\n.let rec pr=\m n.if n==0 then false else if n==1 then true 
+						else if(m>(n/2)) then true 
+						else if (n-(n/m)*m)==0 then false 
+						else pr (m+1) n 
+							in pr 2 n ;
+let firstPrimes =\n.let rec firstPrimes = \m n.if(m>n) then nil:int 
+							else if (prime m) then (x:int->int->int n (firstPrimes (m+1) n)) 
+							else firstPrimes (m+1) n
+								in firstPrimes 1 n
+
+let rec factorielle = \n. if n==0 then 1 else n*(factorielle (n-1))
+(*
+let ltrue = fun a b->a;;
+let lfalse = fun a b->b;;
+let iszero = fun n-> n (fun x-> lfalse) ltrue;;
+let pred = fun n f x -> n (fun g h-> h (g f)) (fun u->x) (fun u->u);;
+let mul = fun m n f ->m ( n f);;
+let rec factrec = fun n->if (iszero n) then (fun x y->x(y)) else mul n (factrec (pred n)) ;;*)
+
+
+
+Bug
+let y=\x.x;
+let x=\z.y;
+x;
+let y=\x z.z;
+x

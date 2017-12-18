@@ -1,0 +1,20 @@
+Ajouter le support des booléen
+Ajouter le support des opérations booléennes et (if ... else ...)
+
+
+
+
+(* pallindrome number *)
+let rec length = \n.if n/10==0 then 1 else 1+(length (n/10));
+
+
+let rec pallindrome = \n.if(n/10==0) then true 
+else if((mod n 10)==(n/( pow 10 ((length n)-1)))) then pallindrome ((mod n ( pow 10 ((length n)-1) )  )/10)
+	else false;
+
+		
+	
+	let rec s = \n.if ((mod n 10)==(mod n 10)) then 10 else  (s (n+1)); 
+
+
+if (((\x.x)((\x.x)6))==((\x.x)((\x.x)6))) then true else false

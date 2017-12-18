@@ -1,0 +1,27 @@
+(*let mul = \m n f.m (n f);
+let succ = \n f x . f (n f x);
+let add = \m n f x . m f (n f x);
+let pred = \n f x . n (\g h. h (g f)) (\u.x) (\u.u);
+let sub = \m n. n pred m;
+let mul = \m n f .m ( n f);
+let ltrue = \a b.a;
+let lfalse = \a b.b;
+let iszero = \n. n (\x. lfalse) ltrue;*)
+
+let pow = \m n. n m;
+let and = \p q. p q p;
+let or = \p q. p p q;
+let neg = \p. p lfalse ltrue;
+let xor = \a b. a (neg b) b;
+let leq = \m n. iszero (sub m n);
+let eq = \a b. and (leq a b) (leq b a);
+let pair = \x y z.z x y;
+let first = \p. p (\x y.x);
+let second = \p. p (\x y.y);
+let isnil =  first;
+let nil = \a.ltrue ;
+let cons = \a b c . (c a b) ;
+let head = \z. z (ltrue );
+let tail = \z. z (lfalse);
+let rec factrec = \n.IF (iszero n) THEN c1 ELSE mul n (factrec (pred n));
+let fact = \n. n (\f a x. f (mul a x) (succ x)) K c1 c1;;

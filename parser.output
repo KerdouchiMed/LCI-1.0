@@ -1,0 +1,4551 @@
+   0  $accept : %entry% $end
+
+   1  instruction : declaration SEMIC instruction
+   2              | expression SEMIC instruction
+   3              | LOAD QUOTE IDENT QUOTE SEMIC instruction
+   4              | LTD expression SEMIC
+   5              | LTC expression SEMIC
+   6              | DTC expression SEMIC
+   7              | DTL expression SEMIC
+   8              | CTL expression SEMIC
+   9              | CTD expression SEMIC
+  10              | EXIT
+  11              | SEMIC
+  12              | EOF
+  13              | error
+
+  14  declaration : LET IDENT EQUAL expression
+  15              | LET REC IDENT EQUAL expression
+  16              | erreursLet
+
+  17  expression : simple
+  18             | arithmeticExp
+  19             | booleanExp
+  20             | expression expression
+  21             | PO expression PF
+
+  22  simple : IDENT
+  23         | IDENT Colon idType
+  24         | S
+  25         | K
+  26         | I
+  27         | B
+  28         | C
+  29         | CINT
+  30         | LAMBDA liste POINT expression
+  31         | PO couple PF
+  32         | L_IF expression L_THEN expression L_ELSE expression
+  33         | IF expression THEN expression ELSE expression
+  34         | LET IDENT EQUAL expression IN expression
+  35         | LET REC IDENT EQUAL expression IN expression
+  36         | CO list_exp CF
+
+  37  list_exp :
+  38           | expression
+  39           | expression SEMIC list_exp
+
+  40  couple : expression VIRGULE expression
+
+  41  liste : IDENT
+  42        | liste IDENT
+
+  43  booleanExp : BOOL
+  44             | expression OR expression
+  45             | expression AND expression
+  46             | NOT expression
+  47             | expression EQ expression
+  48             | expression HIGHERTHAN expression
+  49             | expression LESSTHAN expression
+
+  50  arithmeticExp : REAL
+  51                | INT
+  52                | expression INTPLUS expression
+  53                | expression INTMINUS expression
+  54                | expression INTMULT expression
+  55                | expression INTDIV expression
+  56                | expression REALPLUS expression
+  57                | expression REALMINUS expression
+  58                | expression REALMULT expression
+  59                | expression REALDIV expression
+  60                | INTMINUS expression
+  61                | REALMINUS expression
+
+  62  erreursExp : LAMBDA POINT expression
+  63             | LAMBDA expression
+  64             | liste POINT expression
+
+  65  erreursLet : LET IDENT EQUAL
+  66             | LET IDENT expression
+  67             | LET EQUAL expression
+  68             | LET REC IDENT EQUAL
+  69             | LET REC IDENT expression
+  70             | LET REC EQUAL expression
+
+  71  idType : PO idType PF
+  72         | idType Arrow idType
+  73         | typeName
+
+  74  typeName : OtherTypes
+
+  75  %entry% : '\001' instruction
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . instruction  (75)
+
+	error  shift 3
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	EOF  shift 9
+	LOAD  shift 10
+	LTD  shift 11
+	LTC  shift 12
+	CTD  shift 13
+	CTL  shift 14
+	DTL  shift 15
+	DTC  shift 16
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 22
+	EXIT  shift 23
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	SEMIC  shift 27
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	instruction  goto 33
+	declaration  goto 34
+	expression  goto 35
+	erreursLet  goto 36
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	instruction : error .  (13)
+
+	.  reduce 13
+
+
+state 4
+	simple : CINT .  (29)
+
+	.  reduce 29
+
+
+state 5
+	arithmeticExp : INT .  (51)
+
+	.  reduce 51
+
+
+state 6
+	arithmeticExp : REAL .  (50)
+
+	.  reduce 50
+
+
+state 7
+	booleanExp : BOOL .  (43)
+
+	.  reduce 43
+
+
+state 8
+	simple : IDENT .  (22)
+	simple : IDENT . Colon idType  (23)
+
+	Colon  shift 40
+	CINT  reduce 22
+	INT  reduce 22
+	REAL  reduce 22
+	BOOL  reduce 22
+	IDENT  reduce 22
+	S  reduce 22
+	K  reduce 22
+	B  reduce 22
+	I  reduce 22
+	C  reduce 22
+	LET  reduce 22
+	LAMBDA  reduce 22
+	PO  reduce 22
+	AND  reduce 22
+	OR  reduce 22
+	EQ  reduce 22
+	NOT  reduce 22
+	PF  reduce 22
+	IN  reduce 22
+	SEMIC  reduce 22
+	IF  reduce 22
+	THEN  reduce 22
+	ELSE  reduce 22
+	L_IF  reduce 22
+	L_THEN  reduce 22
+	L_ELSE  reduce 22
+	CO  reduce 22
+	CF  reduce 22
+	VIRGULE  reduce 22
+	INTPLUS  reduce 22
+	INTMINUS  reduce 22
+	INTMULT  reduce 22
+	INTDIV  reduce 22
+	REALPLUS  reduce 22
+	REALMINUS  reduce 22
+	REALMULT  reduce 22
+	REALDIV  reduce 22
+	HIGHERTHAN  reduce 22
+	LESSTHAN  reduce 22
+
+
+state 9
+	instruction : EOF .  (12)
+
+	.  reduce 12
+
+
+state 10
+	instruction : LOAD . QUOTE IDENT QUOTE SEMIC instruction  (3)
+
+	QUOTE  shift 41
+	.  error
+
+
+state 11
+	instruction : LTD . expression SEMIC  (4)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 43
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 12
+	instruction : LTC . expression SEMIC  (5)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 44
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 13
+	instruction : CTD . expression SEMIC  (9)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 45
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 14
+	instruction : CTL . expression SEMIC  (8)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 46
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 15
+	instruction : DTL . expression SEMIC  (7)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 47
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 16
+	instruction : DTC . expression SEMIC  (6)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 48
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 17
+	simple : S .  (24)
+
+	.  reduce 24
+
+
+state 18
+	simple : K .  (25)
+
+	.  reduce 25
+
+
+state 19
+	simple : B .  (27)
+
+	.  reduce 27
+
+
+state 20
+	simple : I .  (26)
+
+	.  reduce 26
+
+
+state 21
+	simple : C .  (28)
+
+	.  reduce 28
+
+
+state 22
+	declaration : LET . IDENT EQUAL expression  (14)
+	declaration : LET . REC IDENT EQUAL expression  (15)
+	simple : LET . IDENT EQUAL expression IN expression  (34)
+	simple : LET . REC IDENT EQUAL expression IN expression  (35)
+	erreursLet : LET . IDENT EQUAL  (65)
+	erreursLet : LET . IDENT expression  (66)
+	erreursLet : LET . EQUAL expression  (67)
+	erreursLet : LET . REC IDENT EQUAL  (68)
+	erreursLet : LET . REC IDENT expression  (69)
+	erreursLet : LET . REC EQUAL expression  (70)
+
+	IDENT  shift 49
+	EQUAL  shift 50
+	REC  shift 51
+	.  error
+
+
+state 23
+	instruction : EXIT .  (10)
+
+	.  reduce 10
+
+
+state 24
+	simple : LAMBDA . liste POINT expression  (30)
+
+	IDENT  shift 52
+	.  error
+
+	liste  goto 53
+
+
+state 25
+	expression : PO . expression PF  (21)
+	simple : PO . couple PF  (31)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 54
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+	couple  goto 55
+
+
+state 26
+	booleanExp : NOT . expression  (46)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 56
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 27
+	instruction : SEMIC .  (11)
+
+	.  reduce 11
+
+
+state 28
+	simple : IF . expression THEN expression ELSE expression  (33)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 57
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 29
+	simple : L_IF . expression L_THEN expression L_ELSE expression  (32)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 58
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 30
+	simple : CO . list_exp CF  (36)
+	list_exp : .  (37)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	CF  reduce 37
+
+	expression  goto 59
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+	list_exp  goto 60
+
+
+state 31
+	arithmeticExp : INTMINUS . expression  (60)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 61
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 32
+	arithmeticExp : REALMINUS . expression  (61)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 62
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 33
+	%entry% : '\001' instruction .  (75)
+
+	.  reduce 75
+
+
+state 34
+	instruction : declaration . SEMIC instruction  (1)
+
+	SEMIC  shift 63
+	.  error
+
+
+state 35
+	instruction : expression . SEMIC instruction  (2)
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	SEMIC  shift 67
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 36
+	declaration : erreursLet .  (16)
+
+	.  reduce 16
+
+
+state 37
+	expression : simple .  (17)
+
+	.  reduce 17
+
+
+state 38
+	expression : arithmeticExp .  (18)
+
+	.  reduce 18
+
+
+state 39
+	expression : booleanExp .  (19)
+
+	.  reduce 19
+
+
+state 40
+	simple : IDENT Colon . idType  (23)
+
+	OtherTypes  shift 79
+	PO  shift 80
+	.  error
+
+	idType  goto 81
+	typeName  goto 82
+
+
+state 41
+	instruction : LOAD QUOTE . IDENT QUOTE SEMIC instruction  (3)
+
+	IDENT  shift 83
+	.  error
+
+
+state 42
+	simple : LET . IDENT EQUAL expression IN expression  (34)
+	simple : LET . REC IDENT EQUAL expression IN expression  (35)
+
+	IDENT  shift 84
+	REC  shift 85
+	.  error
+
+
+state 43
+	instruction : LTD expression . SEMIC  (4)
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	SEMIC  shift 86
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 44
+	instruction : LTC expression . SEMIC  (5)
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	SEMIC  shift 87
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 45
+	instruction : CTD expression . SEMIC  (9)
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	SEMIC  shift 88
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 46
+	instruction : CTL expression . SEMIC  (8)
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	SEMIC  shift 89
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 47
+	instruction : DTL expression . SEMIC  (7)
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	SEMIC  shift 90
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 48
+	instruction : DTC expression . SEMIC  (6)
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	SEMIC  shift 91
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 49
+	declaration : LET IDENT . EQUAL expression  (14)
+	simple : LET IDENT . EQUAL expression IN expression  (34)
+	erreursLet : LET IDENT . EQUAL  (65)
+	erreursLet : LET IDENT . expression  (66)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	EQUAL  shift 92
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 93
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 50
+	erreursLet : LET EQUAL . expression  (67)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 94
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 51
+	declaration : LET REC . IDENT EQUAL expression  (15)
+	simple : LET REC . IDENT EQUAL expression IN expression  (35)
+	erreursLet : LET REC . IDENT EQUAL  (68)
+	erreursLet : LET REC . IDENT expression  (69)
+	erreursLet : LET REC . EQUAL expression  (70)
+
+	IDENT  shift 95
+	EQUAL  shift 96
+	.  error
+
+
+state 52
+	liste : IDENT .  (41)
+
+	.  reduce 41
+
+
+state 53
+	simple : LAMBDA liste . POINT expression  (30)
+	liste : liste . IDENT  (42)
+
+	IDENT  shift 97
+	POINT  shift 98
+	.  error
+
+
+state 54
+	expression : expression . expression  (20)
+	expression : PO expression . PF  (21)
+	couple : expression . VIRGULE expression  (40)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	PF  shift 99
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	VIRGULE  shift 100
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 55
+	simple : PO couple . PF  (31)
+
+	PF  shift 101
+	.  error
+
+
+state 56
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : NOT expression .  (46)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	EQ  shift 66
+	NOT  shift 26
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	AND  reduce 46
+	OR  reduce 46
+	PF  reduce 46
+	IN  reduce 46
+	SEMIC  reduce 46
+	IF  reduce 46
+	THEN  reduce 46
+	ELSE  reduce 46
+	L_IF  reduce 46
+	L_THEN  reduce 46
+	L_ELSE  reduce 46
+	CF  reduce 46
+	VIRGULE  reduce 46
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 57
+	expression : expression . expression  (20)
+	simple : IF expression . THEN expression ELSE expression  (33)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	THEN  shift 102
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 58
+	expression : expression . expression  (20)
+	simple : L_IF expression . L_THEN expression L_ELSE expression  (32)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	L_THEN  shift 103
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 59
+	expression : expression . expression  (20)
+	list_exp : expression .  (38)
+	list_exp : expression . SEMIC list_exp  (39)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	SEMIC  shift 104
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	CF  reduce 38
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 60
+	simple : CO list_exp . CF  (36)
+
+	CF  shift 105
+	.  error
+
+
+state 61
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+	arithmeticExp : INTMINUS expression .  (60)
+
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALMULT  shift 74
+	REALDIV  shift 75
+	CINT  reduce 60
+	INT  reduce 60
+	REAL  reduce 60
+	BOOL  reduce 60
+	IDENT  reduce 60
+	S  reduce 60
+	K  reduce 60
+	B  reduce 60
+	I  reduce 60
+	C  reduce 60
+	LET  reduce 60
+	LAMBDA  reduce 60
+	PO  reduce 60
+	AND  reduce 60
+	OR  reduce 60
+	EQ  reduce 60
+	NOT  reduce 60
+	PF  reduce 60
+	IN  reduce 60
+	SEMIC  reduce 60
+	IF  reduce 60
+	THEN  reduce 60
+	ELSE  reduce 60
+	L_IF  reduce 60
+	L_THEN  reduce 60
+	L_ELSE  reduce 60
+	CO  reduce 60
+	CF  reduce 60
+	VIRGULE  reduce 60
+	INTPLUS  reduce 60
+	INTMINUS  reduce 60
+	REALPLUS  reduce 60
+	REALMINUS  reduce 60
+	HIGHERTHAN  reduce 60
+	LESSTHAN  reduce 60
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 62
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+	arithmeticExp : REALMINUS expression .  (61)
+
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALMULT  shift 74
+	REALDIV  shift 75
+	CINT  reduce 61
+	INT  reduce 61
+	REAL  reduce 61
+	BOOL  reduce 61
+	IDENT  reduce 61
+	S  reduce 61
+	K  reduce 61
+	B  reduce 61
+	I  reduce 61
+	C  reduce 61
+	LET  reduce 61
+	LAMBDA  reduce 61
+	PO  reduce 61
+	AND  reduce 61
+	OR  reduce 61
+	EQ  reduce 61
+	NOT  reduce 61
+	PF  reduce 61
+	IN  reduce 61
+	SEMIC  reduce 61
+	IF  reduce 61
+	THEN  reduce 61
+	ELSE  reduce 61
+	L_IF  reduce 61
+	L_THEN  reduce 61
+	L_ELSE  reduce 61
+	CO  reduce 61
+	CF  reduce 61
+	VIRGULE  reduce 61
+	INTPLUS  reduce 61
+	INTMINUS  reduce 61
+	REALPLUS  reduce 61
+	REALMINUS  reduce 61
+	HIGHERTHAN  reduce 61
+	LESSTHAN  reduce 61
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 63
+	instruction : declaration SEMIC . instruction  (1)
+
+	error  shift 3
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	EOF  shift 9
+	LOAD  shift 10
+	LTD  shift 11
+	LTC  shift 12
+	CTD  shift 13
+	CTL  shift 14
+	DTL  shift 15
+	DTC  shift 16
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 22
+	EXIT  shift 23
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	SEMIC  shift 27
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	instruction  goto 106
+	declaration  goto 34
+	expression  goto 35
+	erreursLet  goto 36
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 64
+	booleanExp : expression AND . expression  (45)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 107
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 65
+	booleanExp : expression OR . expression  (44)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 108
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 66
+	booleanExp : expression EQ . expression  (47)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 109
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 67
+	instruction : expression SEMIC . instruction  (2)
+
+	error  shift 3
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	EOF  shift 9
+	LOAD  shift 10
+	LTD  shift 11
+	LTC  shift 12
+	CTD  shift 13
+	CTL  shift 14
+	DTL  shift 15
+	DTC  shift 16
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 22
+	EXIT  shift 23
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	SEMIC  shift 27
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	instruction  goto 110
+	declaration  goto 34
+	expression  goto 35
+	erreursLet  goto 36
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 68
+	arithmeticExp : expression INTPLUS . expression  (52)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 111
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 69
+	arithmeticExp : expression INTMINUS . expression  (53)
+	arithmeticExp : INTMINUS . expression  (60)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 112
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 70
+	arithmeticExp : expression INTMULT . expression  (54)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 113
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 71
+	arithmeticExp : expression INTDIV . expression  (55)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 114
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 72
+	arithmeticExp : expression REALPLUS . expression  (56)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 115
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 73
+	arithmeticExp : expression REALMINUS . expression  (57)
+	arithmeticExp : REALMINUS . expression  (61)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 116
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 74
+	arithmeticExp : expression REALMULT . expression  (58)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 117
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 75
+	arithmeticExp : expression REALDIV . expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 118
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 76
+	booleanExp : expression HIGHERTHAN . expression  (48)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 119
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 77
+	booleanExp : expression LESSTHAN . expression  (49)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 120
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 78
+	expression : expression . expression  (20)
+	expression : expression expression .  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	.  reduce 20
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 79
+	typeName : OtherTypes .  (74)
+
+	.  reduce 74
+
+
+state 80
+	idType : PO . idType PF  (71)
+
+	OtherTypes  shift 79
+	PO  shift 80
+	.  error
+
+	idType  goto 121
+	typeName  goto 82
+
+
+state 81
+	simple : IDENT Colon idType .  (23)
+	idType : idType . Arrow idType  (72)
+
+	Arrow  shift 122
+	CINT  reduce 23
+	INT  reduce 23
+	REAL  reduce 23
+	BOOL  reduce 23
+	IDENT  reduce 23
+	S  reduce 23
+	K  reduce 23
+	B  reduce 23
+	I  reduce 23
+	C  reduce 23
+	LET  reduce 23
+	LAMBDA  reduce 23
+	PO  reduce 23
+	AND  reduce 23
+	OR  reduce 23
+	EQ  reduce 23
+	NOT  reduce 23
+	PF  reduce 23
+	IN  reduce 23
+	SEMIC  reduce 23
+	IF  reduce 23
+	THEN  reduce 23
+	ELSE  reduce 23
+	L_IF  reduce 23
+	L_THEN  reduce 23
+	L_ELSE  reduce 23
+	CO  reduce 23
+	CF  reduce 23
+	VIRGULE  reduce 23
+	INTPLUS  reduce 23
+	INTMINUS  reduce 23
+	INTMULT  reduce 23
+	INTDIV  reduce 23
+	REALPLUS  reduce 23
+	REALMINUS  reduce 23
+	REALMULT  reduce 23
+	REALDIV  reduce 23
+	HIGHERTHAN  reduce 23
+	LESSTHAN  reduce 23
+
+
+state 82
+	idType : typeName .  (73)
+
+	.  reduce 73
+
+
+state 83
+	instruction : LOAD QUOTE IDENT . QUOTE SEMIC instruction  (3)
+
+	QUOTE  shift 123
+	.  error
+
+
+state 84
+	simple : LET IDENT . EQUAL expression IN expression  (34)
+
+	EQUAL  shift 124
+	.  error
+
+
+state 85
+	simple : LET REC . IDENT EQUAL expression IN expression  (35)
+
+	IDENT  shift 125
+	.  error
+
+
+state 86
+	instruction : LTD expression SEMIC .  (4)
+
+	.  reduce 4
+
+
+state 87
+	instruction : LTC expression SEMIC .  (5)
+
+	.  reduce 5
+
+
+state 88
+	instruction : CTD expression SEMIC .  (9)
+
+	.  reduce 9
+
+
+state 89
+	instruction : CTL expression SEMIC .  (8)
+
+	.  reduce 8
+
+
+state 90
+	instruction : DTL expression SEMIC .  (7)
+
+	.  reduce 7
+
+
+state 91
+	instruction : DTC expression SEMIC .  (6)
+
+	.  reduce 6
+
+
+state 92
+	declaration : LET IDENT EQUAL . expression  (14)
+	simple : LET IDENT EQUAL . expression IN expression  (34)
+	erreursLet : LET IDENT EQUAL .  (65)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	SEMIC  reduce 65
+
+	expression  goto 126
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 93
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+	erreursLet : LET IDENT expression .  (66)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	SEMIC  reduce 66
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 94
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+	erreursLet : LET EQUAL expression .  (67)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	SEMIC  reduce 67
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 95
+	declaration : LET REC IDENT . EQUAL expression  (15)
+	simple : LET REC IDENT . EQUAL expression IN expression  (35)
+	erreursLet : LET REC IDENT . EQUAL  (68)
+	erreursLet : LET REC IDENT . expression  (69)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	EQUAL  shift 127
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 128
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 96
+	erreursLet : LET REC EQUAL . expression  (70)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 129
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 97
+	liste : liste IDENT .  (42)
+
+	.  reduce 42
+
+
+state 98
+	simple : LAMBDA liste POINT . expression  (30)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 130
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 99
+	expression : PO expression PF .  (21)
+
+	.  reduce 21
+
+
+state 100
+	couple : expression VIRGULE . expression  (40)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 131
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 101
+	simple : PO couple PF .  (31)
+
+	.  reduce 31
+
+
+state 102
+	simple : IF expression THEN . expression ELSE expression  (33)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 132
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 103
+	simple : L_IF expression L_THEN . expression L_ELSE expression  (32)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 133
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 104
+	list_exp : expression SEMIC . list_exp  (39)
+	list_exp : .  (37)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	CF  reduce 37
+
+	expression  goto 59
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+	list_exp  goto 134
+
+
+state 105
+	simple : CO list_exp CF .  (36)
+
+	.  reduce 36
+
+
+state 106
+	instruction : declaration SEMIC instruction .  (1)
+
+	.  reduce 1
+
+
+state 107
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression AND expression .  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	EQ  shift 66
+	NOT  shift 26
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	AND  reduce 45
+	OR  reduce 45
+	PF  reduce 45
+	IN  reduce 45
+	SEMIC  reduce 45
+	IF  reduce 45
+	THEN  reduce 45
+	ELSE  reduce 45
+	L_IF  reduce 45
+	L_THEN  reduce 45
+	L_ELSE  reduce 45
+	CF  reduce 45
+	VIRGULE  reduce 45
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 108
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression OR expression .  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	EQ  shift 66
+	NOT  shift 26
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	OR  reduce 44
+	PF  reduce 44
+	IN  reduce 44
+	SEMIC  reduce 44
+	IF  reduce 44
+	THEN  reduce 44
+	ELSE  reduce 44
+	L_IF  reduce 44
+	L_THEN  reduce 44
+	L_ELSE  reduce 44
+	CF  reduce 44
+	VIRGULE  reduce 44
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 109
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression EQ expression .  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	AND  reduce 47
+	OR  reduce 47
+	EQ  reduce 47
+	NOT  reduce 47
+	PF  reduce 47
+	IN  reduce 47
+	SEMIC  reduce 47
+	IF  reduce 47
+	THEN  reduce 47
+	ELSE  reduce 47
+	L_IF  reduce 47
+	L_THEN  reduce 47
+	L_ELSE  reduce 47
+	CF  reduce 47
+	VIRGULE  reduce 47
+	HIGHERTHAN  reduce 47
+	LESSTHAN  reduce 47
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 110
+	instruction : expression SEMIC instruction .  (2)
+
+	.  reduce 2
+
+
+state 111
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression INTPLUS expression .  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALMULT  shift 74
+	REALDIV  shift 75
+	CINT  reduce 52
+	INT  reduce 52
+	REAL  reduce 52
+	BOOL  reduce 52
+	IDENT  reduce 52
+	S  reduce 52
+	K  reduce 52
+	B  reduce 52
+	I  reduce 52
+	C  reduce 52
+	LET  reduce 52
+	LAMBDA  reduce 52
+	PO  reduce 52
+	AND  reduce 52
+	OR  reduce 52
+	EQ  reduce 52
+	NOT  reduce 52
+	PF  reduce 52
+	IN  reduce 52
+	SEMIC  reduce 52
+	IF  reduce 52
+	THEN  reduce 52
+	ELSE  reduce 52
+	L_IF  reduce 52
+	L_THEN  reduce 52
+	L_ELSE  reduce 52
+	CO  reduce 52
+	CF  reduce 52
+	VIRGULE  reduce 52
+	INTPLUS  reduce 52
+	INTMINUS  reduce 52
+	REALPLUS  reduce 52
+	REALMINUS  reduce 52
+	HIGHERTHAN  reduce 52
+	LESSTHAN  reduce 52
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+112: reduce/reduce conflict (reduce 53, reduce 60) on CINT
+112: reduce/reduce conflict (reduce 53, reduce 60) on INT
+112: reduce/reduce conflict (reduce 53, reduce 60) on REAL
+112: reduce/reduce conflict (reduce 53, reduce 60) on BOOL
+112: reduce/reduce conflict (reduce 53, reduce 60) on IDENT
+112: reduce/reduce conflict (reduce 53, reduce 60) on S
+112: reduce/reduce conflict (reduce 53, reduce 60) on K
+112: reduce/reduce conflict (reduce 53, reduce 60) on B
+112: reduce/reduce conflict (reduce 53, reduce 60) on I
+112: reduce/reduce conflict (reduce 53, reduce 60) on C
+112: reduce/reduce conflict (reduce 53, reduce 60) on LET
+112: reduce/reduce conflict (reduce 53, reduce 60) on LAMBDA
+112: reduce/reduce conflict (reduce 53, reduce 60) on PO
+112: reduce/reduce conflict (reduce 53, reduce 60) on AND
+112: reduce/reduce conflict (reduce 53, reduce 60) on OR
+112: reduce/reduce conflict (reduce 53, reduce 60) on EQ
+112: reduce/reduce conflict (reduce 53, reduce 60) on NOT
+112: reduce/reduce conflict (reduce 53, reduce 60) on PF
+112: reduce/reduce conflict (reduce 53, reduce 60) on IN
+112: reduce/reduce conflict (reduce 53, reduce 60) on SEMIC
+112: reduce/reduce conflict (reduce 53, reduce 60) on IF
+112: reduce/reduce conflict (reduce 53, reduce 60) on THEN
+112: reduce/reduce conflict (reduce 53, reduce 60) on ELSE
+112: reduce/reduce conflict (reduce 53, reduce 60) on L_IF
+112: reduce/reduce conflict (reduce 53, reduce 60) on L_THEN
+112: reduce/reduce conflict (reduce 53, reduce 60) on L_ELSE
+112: reduce/reduce conflict (reduce 53, reduce 60) on CO
+112: reduce/reduce conflict (reduce 53, reduce 60) on CF
+112: reduce/reduce conflict (reduce 53, reduce 60) on VIRGULE
+112: reduce/reduce conflict (reduce 53, reduce 60) on INTPLUS
+112: reduce/reduce conflict (reduce 53, reduce 60) on INTMINUS
+112: reduce/reduce conflict (reduce 53, reduce 60) on REALPLUS
+112: reduce/reduce conflict (reduce 53, reduce 60) on REALMINUS
+112: reduce/reduce conflict (reduce 53, reduce 60) on HIGHERTHAN
+112: reduce/reduce conflict (reduce 53, reduce 60) on LESSTHAN
+state 112
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression INTMINUS expression .  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+	arithmeticExp : INTMINUS expression .  (60)
+
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALMULT  shift 74
+	REALDIV  shift 75
+	CINT  reduce 53
+	INT  reduce 53
+	REAL  reduce 53
+	BOOL  reduce 53
+	IDENT  reduce 53
+	S  reduce 53
+	K  reduce 53
+	B  reduce 53
+	I  reduce 53
+	C  reduce 53
+	LET  reduce 53
+	LAMBDA  reduce 53
+	PO  reduce 53
+	AND  reduce 53
+	OR  reduce 53
+	EQ  reduce 53
+	NOT  reduce 53
+	PF  reduce 53
+	IN  reduce 53
+	SEMIC  reduce 53
+	IF  reduce 53
+	THEN  reduce 53
+	ELSE  reduce 53
+	L_IF  reduce 53
+	L_THEN  reduce 53
+	L_ELSE  reduce 53
+	CO  reduce 53
+	CF  reduce 53
+	VIRGULE  reduce 53
+	INTPLUS  reduce 53
+	INTMINUS  reduce 53
+	REALPLUS  reduce 53
+	REALMINUS  reduce 53
+	HIGHERTHAN  reduce 53
+	LESSTHAN  reduce 53
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 113
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression INTMULT expression .  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	.  reduce 54
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 114
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression INTDIV expression .  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	.  reduce 55
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 115
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression REALPLUS expression .  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALMULT  shift 74
+	REALDIV  shift 75
+	CINT  reduce 56
+	INT  reduce 56
+	REAL  reduce 56
+	BOOL  reduce 56
+	IDENT  reduce 56
+	S  reduce 56
+	K  reduce 56
+	B  reduce 56
+	I  reduce 56
+	C  reduce 56
+	LET  reduce 56
+	LAMBDA  reduce 56
+	PO  reduce 56
+	AND  reduce 56
+	OR  reduce 56
+	EQ  reduce 56
+	NOT  reduce 56
+	PF  reduce 56
+	IN  reduce 56
+	SEMIC  reduce 56
+	IF  reduce 56
+	THEN  reduce 56
+	ELSE  reduce 56
+	L_IF  reduce 56
+	L_THEN  reduce 56
+	L_ELSE  reduce 56
+	CO  reduce 56
+	CF  reduce 56
+	VIRGULE  reduce 56
+	INTPLUS  reduce 56
+	INTMINUS  reduce 56
+	REALPLUS  reduce 56
+	REALMINUS  reduce 56
+	HIGHERTHAN  reduce 56
+	LESSTHAN  reduce 56
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+116: reduce/reduce conflict (reduce 57, reduce 61) on CINT
+116: reduce/reduce conflict (reduce 57, reduce 61) on INT
+116: reduce/reduce conflict (reduce 57, reduce 61) on REAL
+116: reduce/reduce conflict (reduce 57, reduce 61) on BOOL
+116: reduce/reduce conflict (reduce 57, reduce 61) on IDENT
+116: reduce/reduce conflict (reduce 57, reduce 61) on S
+116: reduce/reduce conflict (reduce 57, reduce 61) on K
+116: reduce/reduce conflict (reduce 57, reduce 61) on B
+116: reduce/reduce conflict (reduce 57, reduce 61) on I
+116: reduce/reduce conflict (reduce 57, reduce 61) on C
+116: reduce/reduce conflict (reduce 57, reduce 61) on LET
+116: reduce/reduce conflict (reduce 57, reduce 61) on LAMBDA
+116: reduce/reduce conflict (reduce 57, reduce 61) on PO
+116: reduce/reduce conflict (reduce 57, reduce 61) on AND
+116: reduce/reduce conflict (reduce 57, reduce 61) on OR
+116: reduce/reduce conflict (reduce 57, reduce 61) on EQ
+116: reduce/reduce conflict (reduce 57, reduce 61) on NOT
+116: reduce/reduce conflict (reduce 57, reduce 61) on PF
+116: reduce/reduce conflict (reduce 57, reduce 61) on IN
+116: reduce/reduce conflict (reduce 57, reduce 61) on SEMIC
+116: reduce/reduce conflict (reduce 57, reduce 61) on IF
+116: reduce/reduce conflict (reduce 57, reduce 61) on THEN
+116: reduce/reduce conflict (reduce 57, reduce 61) on ELSE
+116: reduce/reduce conflict (reduce 57, reduce 61) on L_IF
+116: reduce/reduce conflict (reduce 57, reduce 61) on L_THEN
+116: reduce/reduce conflict (reduce 57, reduce 61) on L_ELSE
+116: reduce/reduce conflict (reduce 57, reduce 61) on CO
+116: reduce/reduce conflict (reduce 57, reduce 61) on CF
+116: reduce/reduce conflict (reduce 57, reduce 61) on VIRGULE
+116: reduce/reduce conflict (reduce 57, reduce 61) on INTPLUS
+116: reduce/reduce conflict (reduce 57, reduce 61) on INTMINUS
+116: reduce/reduce conflict (reduce 57, reduce 61) on REALPLUS
+116: reduce/reduce conflict (reduce 57, reduce 61) on REALMINUS
+116: reduce/reduce conflict (reduce 57, reduce 61) on HIGHERTHAN
+116: reduce/reduce conflict (reduce 57, reduce 61) on LESSTHAN
+state 116
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression REALMINUS expression .  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+	arithmeticExp : REALMINUS expression .  (61)
+
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALMULT  shift 74
+	REALDIV  shift 75
+	CINT  reduce 57
+	INT  reduce 57
+	REAL  reduce 57
+	BOOL  reduce 57
+	IDENT  reduce 57
+	S  reduce 57
+	K  reduce 57
+	B  reduce 57
+	I  reduce 57
+	C  reduce 57
+	LET  reduce 57
+	LAMBDA  reduce 57
+	PO  reduce 57
+	AND  reduce 57
+	OR  reduce 57
+	EQ  reduce 57
+	NOT  reduce 57
+	PF  reduce 57
+	IN  reduce 57
+	SEMIC  reduce 57
+	IF  reduce 57
+	THEN  reduce 57
+	ELSE  reduce 57
+	L_IF  reduce 57
+	L_THEN  reduce 57
+	L_ELSE  reduce 57
+	CO  reduce 57
+	CF  reduce 57
+	VIRGULE  reduce 57
+	INTPLUS  reduce 57
+	INTMINUS  reduce 57
+	REALPLUS  reduce 57
+	REALMINUS  reduce 57
+	HIGHERTHAN  reduce 57
+	LESSTHAN  reduce 57
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 117
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression REALMULT expression .  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	.  reduce 58
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 118
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+	arithmeticExp : expression REALDIV expression .  (59)
+
+	.  reduce 59
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 119
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression HIGHERTHAN expression .  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	AND  reduce 48
+	OR  reduce 48
+	EQ  reduce 48
+	NOT  reduce 48
+	PF  reduce 48
+	IN  reduce 48
+	SEMIC  reduce 48
+	IF  reduce 48
+	THEN  reduce 48
+	ELSE  reduce 48
+	L_IF  reduce 48
+	L_THEN  reduce 48
+	L_ELSE  reduce 48
+	CF  reduce 48
+	VIRGULE  reduce 48
+	HIGHERTHAN  reduce 48
+	LESSTHAN  reduce 48
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 120
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	booleanExp : expression LESSTHAN expression .  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	AND  reduce 49
+	OR  reduce 49
+	EQ  reduce 49
+	NOT  reduce 49
+	PF  reduce 49
+	IN  reduce 49
+	SEMIC  reduce 49
+	IF  reduce 49
+	THEN  reduce 49
+	ELSE  reduce 49
+	L_IF  reduce 49
+	L_THEN  reduce 49
+	L_ELSE  reduce 49
+	CF  reduce 49
+	VIRGULE  reduce 49
+	HIGHERTHAN  reduce 49
+	LESSTHAN  reduce 49
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 121
+	idType : PO idType . PF  (71)
+	idType : idType . Arrow idType  (72)
+
+	PF  shift 135
+	Arrow  shift 122
+	.  error
+
+
+state 122
+	idType : idType Arrow . idType  (72)
+
+	OtherTypes  shift 79
+	PO  shift 80
+	.  error
+
+	idType  goto 136
+	typeName  goto 82
+
+
+state 123
+	instruction : LOAD QUOTE IDENT QUOTE . SEMIC instruction  (3)
+
+	SEMIC  shift 137
+	.  error
+
+
+state 124
+	simple : LET IDENT EQUAL . expression IN expression  (34)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 138
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 125
+	simple : LET REC IDENT . EQUAL expression IN expression  (35)
+
+	EQUAL  shift 139
+	.  error
+
+
+state 126
+	declaration : LET IDENT EQUAL expression .  (14)
+	expression : expression . expression  (20)
+	simple : LET IDENT EQUAL expression . IN expression  (34)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IN  shift 140
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	SEMIC  reduce 14
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 127
+	declaration : LET REC IDENT EQUAL . expression  (15)
+	simple : LET REC IDENT EQUAL . expression IN expression  (35)
+	erreursLet : LET REC IDENT EQUAL .  (68)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	SEMIC  reduce 68
+
+	expression  goto 141
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 128
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+	erreursLet : LET REC IDENT expression .  (69)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	SEMIC  reduce 69
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 129
+	expression : expression . expression  (20)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+	erreursLet : LET REC EQUAL expression .  (70)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	SEMIC  reduce 70
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 130
+	expression : expression . expression  (20)
+	simple : LAMBDA liste POINT expression .  (30)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	PF  reduce 30
+	IN  reduce 30
+	SEMIC  reduce 30
+	THEN  reduce 30
+	ELSE  reduce 30
+	L_THEN  reduce 30
+	L_ELSE  reduce 30
+	CF  reduce 30
+	VIRGULE  reduce 30
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 131
+	expression : expression . expression  (20)
+	couple : expression VIRGULE expression .  (40)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	PF  reduce 40
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 132
+	expression : expression . expression  (20)
+	simple : IF expression THEN expression . ELSE expression  (33)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	ELSE  shift 142
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 133
+	expression : expression . expression  (20)
+	simple : L_IF expression L_THEN expression . L_ELSE expression  (32)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	L_ELSE  shift 143
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 134
+	list_exp : expression SEMIC list_exp .  (39)
+
+	.  reduce 39
+
+
+state 135
+	idType : PO idType PF .  (71)
+
+	.  reduce 71
+
+
+state 136
+	idType : idType . Arrow idType  (72)
+	idType : idType Arrow idType .  (72)
+
+	Arrow  shift 122
+	CINT  reduce 72
+	INT  reduce 72
+	REAL  reduce 72
+	BOOL  reduce 72
+	IDENT  reduce 72
+	S  reduce 72
+	K  reduce 72
+	B  reduce 72
+	I  reduce 72
+	C  reduce 72
+	LET  reduce 72
+	LAMBDA  reduce 72
+	PO  reduce 72
+	AND  reduce 72
+	OR  reduce 72
+	EQ  reduce 72
+	NOT  reduce 72
+	PF  reduce 72
+	IN  reduce 72
+	SEMIC  reduce 72
+	IF  reduce 72
+	THEN  reduce 72
+	ELSE  reduce 72
+	L_IF  reduce 72
+	L_THEN  reduce 72
+	L_ELSE  reduce 72
+	CO  reduce 72
+	CF  reduce 72
+	VIRGULE  reduce 72
+	INTPLUS  reduce 72
+	INTMINUS  reduce 72
+	INTMULT  reduce 72
+	INTDIV  reduce 72
+	REALPLUS  reduce 72
+	REALMINUS  reduce 72
+	REALMULT  reduce 72
+	REALDIV  reduce 72
+	HIGHERTHAN  reduce 72
+	LESSTHAN  reduce 72
+
+
+state 137
+	instruction : LOAD QUOTE IDENT QUOTE SEMIC . instruction  (3)
+
+	error  shift 3
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	EOF  shift 9
+	LOAD  shift 10
+	LTD  shift 11
+	LTC  shift 12
+	CTD  shift 13
+	CTL  shift 14
+	DTL  shift 15
+	DTC  shift 16
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 22
+	EXIT  shift 23
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	SEMIC  shift 27
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	instruction  goto 144
+	declaration  goto 34
+	expression  goto 35
+	erreursLet  goto 36
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 138
+	expression : expression . expression  (20)
+	simple : LET IDENT EQUAL expression . IN expression  (34)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IN  shift 140
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 139
+	simple : LET REC IDENT EQUAL . expression IN expression  (35)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 145
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 140
+	simple : LET IDENT EQUAL expression IN . expression  (34)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 146
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 141
+	declaration : LET REC IDENT EQUAL expression .  (15)
+	expression : expression . expression  (20)
+	simple : LET REC IDENT EQUAL expression . IN expression  (35)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IN  shift 147
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	SEMIC  reduce 15
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 142
+	simple : IF expression THEN expression ELSE . expression  (33)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 148
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 143
+	simple : L_IF expression L_THEN expression L_ELSE . expression  (32)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 149
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 144
+	instruction : LOAD QUOTE IDENT QUOTE SEMIC instruction .  (3)
+
+	.  reduce 3
+
+
+state 145
+	expression : expression . expression  (20)
+	simple : LET REC IDENT EQUAL expression . IN expression  (35)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IN  shift 147
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	.  error
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 146
+	expression : expression . expression  (20)
+	simple : LET IDENT EQUAL expression IN expression .  (34)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	.  reduce 34
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 147
+	simple : LET REC IDENT EQUAL expression IN . expression  (35)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTMINUS  shift 31
+	REALMINUS  shift 32
+	.  error
+
+	expression  goto 150
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 148
+	expression : expression . expression  (20)
+	simple : IF expression THEN expression ELSE expression .  (33)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	PF  reduce 33
+	IN  reduce 33
+	SEMIC  reduce 33
+	THEN  reduce 33
+	ELSE  reduce 33
+	L_THEN  reduce 33
+	L_ELSE  reduce 33
+	CF  reduce 33
+	VIRGULE  reduce 33
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 149
+	expression : expression . expression  (20)
+	simple : L_IF expression L_THEN expression L_ELSE expression .  (32)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	CINT  shift 4
+	INT  shift 5
+	REAL  shift 6
+	BOOL  shift 7
+	IDENT  shift 8
+	S  shift 17
+	K  shift 18
+	B  shift 19
+	I  shift 20
+	C  shift 21
+	LET  shift 42
+	LAMBDA  shift 24
+	PO  shift 25
+	AND  shift 64
+	OR  shift 65
+	EQ  shift 66
+	NOT  shift 26
+	IF  shift 28
+	L_IF  shift 29
+	CO  shift 30
+	INTPLUS  shift 68
+	INTMINUS  shift 69
+	INTMULT  shift 70
+	INTDIV  shift 71
+	REALPLUS  shift 72
+	REALMINUS  shift 73
+	REALMULT  shift 74
+	REALDIV  shift 75
+	HIGHERTHAN  shift 76
+	LESSTHAN  shift 77
+	PF  reduce 32
+	IN  reduce 32
+	SEMIC  reduce 32
+	THEN  reduce 32
+	ELSE  reduce 32
+	L_THEN  reduce 32
+	L_ELSE  reduce 32
+	CF  reduce 32
+	VIRGULE  reduce 32
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+state 150
+	expression : expression . expression  (20)
+	simple : LET REC IDENT EQUAL expression IN expression .  (35)
+	booleanExp : expression . OR expression  (44)
+	booleanExp : expression . AND expression  (45)
+	booleanExp : expression . EQ expression  (47)
+	booleanExp : expression . HIGHERTHAN expression  (48)
+	booleanExp : expression . LESSTHAN expression  (49)
+	arithmeticExp : expression . INTPLUS expression  (52)
+	arithmeticExp : expression . INTMINUS expression  (53)
+	arithmeticExp : expression . INTMULT expression  (54)
+	arithmeticExp : expression . INTDIV expression  (55)
+	arithmeticExp : expression . REALPLUS expression  (56)
+	arithmeticExp : expression . REALMINUS expression  (57)
+	arithmeticExp : expression . REALMULT expression  (58)
+	arithmeticExp : expression . REALDIV expression  (59)
+
+	.  reduce 35
+
+	expression  goto 78
+	simple  goto 37
+	arithmeticExp  goto 38
+	booleanExp  goto 39
+
+
+Rules never reduced:
+	erreursExp : LAMBDA POINT expression  (62)
+	erreursExp : LAMBDA expression  (63)
+	erreursExp : liste POINT expression  (64)
+
+
+State 112 contains 35 reduce/reduce conflicts.
+State 116 contains 35 reduce/reduce conflicts.
+
+
+64 terminals, 15 nonterminals
+76 grammar rules, 151 states
